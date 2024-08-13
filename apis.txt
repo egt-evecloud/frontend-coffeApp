@@ -1,0 +1,37 @@
+---API Lectura del Qr---
+"curl --location 'http://localhost:5000/api/web_scraping' \
+--header 'Content-Type: application/json' \
+--data '{
+    "url": "https://sga.unemi.edu.ec/p_valida_carnet/digital?code=614023383085&tpp=ad"
+}'"
+
+---API Retorno de WebScraping---
+curl --location 'http://localhost:2144/api/coffee_order' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+        "name": "Juan Perez",
+        "identification": "1234567890",
+        "mail": "juan.perez@example.com",
+        "department": "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
+        "position": "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1",
+        "coffee": [
+            {"coffee_type": "espresso", "quantity": 2},
+            {"coffee_type": "latte", "quantity": 1}
+        ]
+    }'
+
+---API Guardar Pedido---
+{
+    "code": "0",
+    "data": {
+        "address": "AV. 17 DE SEPTIEMBRE, LEONIDAS PROAÑO, 1",
+        "city": "MILAGRO",
+        "department": "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
+        "identification": "0941511222",
+        "institution_email": "jguerrag@unemi.edu.ec",
+        "personal_email": "jguerrag7@gmail.com",
+        "phone": "0969296211",
+        "position": "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1"
+    },
+    "message": "Order processed successfully"
+}
