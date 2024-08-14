@@ -1,7 +1,9 @@
+"use client";
 import React from 'react';
-import Navbar from '../../components/navbar';
-import Footer from '../../components/footer';
-import QrScannerComponent from '../../components/qr_reader';
+import Navbar from '../../components/layout/navbar';
+import Footer from '../../components/layout/footer';
+import { Scanner } from '@yudiel/react-qr-scanner';
+
 
 const HomePage = () => {
   return (
@@ -13,17 +15,17 @@ const HomePage = () => {
         </div>
         <div className="grid grid-cols-6 h-1/2 items-center justify-center py-6">
           <div className="col-span-4 col-start-2 bg-[#D9D9D9] p-2 min-w-[300px] min-h-[200px] w-auto h-auto max-h-screen rounded-lg">
-            {/* <QrScannerComponent /> */}
+            <Scanner  onScan={(result) => console.log(result)} />
+            {/* Aquí*/}
           </div>
         </div>
-
-          {/* <div className='py-6'>
-            <button
-              type="button"
-              className="bg-[#FC7E00] text-white text-xl font-bold py-3 px-4 rounded-lg hover:bg-[#FE9900] flex items-center space-x-2">
-              Escanear
-            </button>
-          </div> */}
+        <div className='py-6'>
+          <button
+            type="button"
+            className="bg-[#FC7E00] text-white text-xl font-bold py-3 px-4 rounded-lg hover:bg-[#FE9900] flex items-center space-x-2">
+            Escanear
+          </button>
+        </div>
       </div>
       <Footer />
     </div>
