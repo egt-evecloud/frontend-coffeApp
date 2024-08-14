@@ -1,141 +1,100 @@
-import React, { Fragment, useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { useRouter } from "next/router";
-import router from "next/dist/shared/lib/router/router";
-import { toast, ToastContainer } from "react-toastify";
-import Loader from '../../components/layout/loader';
-import { Cafe, Empleado,} from '@/interfaces/pedido';
+import { useState, useEffect } from 'react';
 
+const Modal = ({ isOpen, onClose, url }) => {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(false); // Nuevo estado para manejar el éxito
 
-const ModalMostrarDatos: React.FC<ModalProps> = ({
-  onClose,
-  onOpenModal,
-  persona,
-  tokenVerificacion,
-}) => {
-  const router = useRouter();
-  const [user_id, setUserID] = useState<number>(0);
-  const [documento, setDocumento] = useState<string>("");
-  const [nombres, setNombres] = useState<string>("");
-  const [appelido_paterno, setApellidoPaterno] = useState<string>("");
-  const [apellido_materno, setApellidoMaterno] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [mail_personal, setMailPersonal] = useState<string>("");
-  const [mail_institucional, setMailInstitucional] = useState<string>("");
-  
+  useEffect(() => {
+    if (url) {
+      fetchData();
+    }
+  }, [url]);
 
+  const fetchData = async () => {
+    setLoading(true);
+    // Simulando la respuesta del backend
+    const exampleData = {
+      name: "Juan Perez",
+      identification: "1234567890",
+      mail: "juan.perez@example.com",
+      department: "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
+      position: "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1",
+      coffee: [
+        { coffee_type: "espresso", quantity: 2 },
+        { coffee_type: "latte", quantity: 1 }
+      ]
+    };
 
-  const handleRegistrar = async () => {
-
-  } 
-  const handleMensajeExitoso = async () => {
-    const mensaje = `Ah registrado de manera exitosa el pedido.`;
-    Swal.fire({
-      title: "Pedido Guardado",
-      html: mensaje,
-      icon: "warning",
-      showCancelButton: true,
-      allowOutsideClick: false,
-      confirmButtonColor: "#253CA6",
-      confirmButtonText: "Salir",
-      customClass: {
-        cancelButton: `text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600`,
-      },
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        // await actionSendCode();
-      }
-      if (result.isDismissed) {
-        console.log("Redirigiendo a Ingresar Código");
-        handleClose();
-        onOpenModal(tokenVerificacion);
-      }
-    });
+    // Simular tiempo de respuesta del backend
+    setTimeout(() => {
+      setData(exampleData);
+      setLoading(false);
+    }, 1000);
   };
 
+  const handleRegister = () => {
+    // Aquí puedes hacer la llamada a la API para registrar los datos
+    // Simularemos un envío exitoso
+    setIsSuccess(true);
+    // Puedes hacer un reset del modal después de unos segundos o al cerrarlo
+    setTimeout(() => {
+      onClose();
+      setIsSuccess(false);
+      setData(null);
+    }, 2000); // Cierra el modal después de 2 segundos
+  };
 
-  const handleClose = async () => {
-    await onClose();
-  
-  useEffect(() => {
-    if (persona) {
-      setDocumento(persona.documento ?? "");
-      setNombres(persona.nombres ?? "");
-      setApellidoPaterno(persona.apellido_paterno ?? "");
-      setApellidoMaterno(persona.apellido_materno ?? "");
-      setMailPersonal(persona.correo_personal ?? "");
-      setMailInstitucional(persona.correo_institucional ?? "");
-      const user = persona.usuario;
-      if (user) {
-        setUsername(user.username);
-        setUserID(user.id ?? 0);
-      }
-    
-  });
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-3/4 max-w-xs h-auto m-2">
-        <div className="grid grid-cols-6 gap-0 flex justify-between">
-          <div className="col-span-2 col-span-6 flex justify-end">
-            <button
-              onClick={() => {
-                handleClose();
-              }}
-              type="button"
-              className="hs-dropdown-toggle !text-[1.5rem] text-[#8c9097] dark:text-white/50/25"
-              data-hs-overlay="#formmodalmdo"
-            >
-              <span className="sr-only">Close</span>
-              <i className="ri-close-line"></i>
-            </button>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4 sm:p-6">
+      <div className="bg-white p-6 rounded-lg w-full max-w-lg sm:w-2/3 lg:w-1/3">
+        {isSuccess ? (
+          <div className="flex flex-col items-center">
+            <h2 className="text-xl font-bold mb-4 text-green-600">¡Datos enviados correctamente!</h2>
           </div>
-        </div>
-        <div className="flex justify-center items-center mb-4">
-          <img
-            src={"/assets/iconfonts/grupo_29.svg"}
-            alt="Icono"
-            className="w-12 h-12"
-          />
-        </div>
-        <h6 className="text-[#FC7E00] text-center font-bold mb-4">
-          Datos de la Cuenta
-        </h6>
-        <div className="text-[#1D2E7F] text-center">
-          <p>{nombres?.toUpperCase()}</p>
-        </div>
-        <div className="text-[#1D2E7F] text-center">
-          <p>
-            {appelido_paterno?.toUpperCase()} {apellido_materno?.toUpperCase()}
-          </p>
-        </div>
-        <div className="text-[#1D2E7F] text-center">
-          <p className="inline">Nombre de usuario: </p>
-          <p className="inline font-bold">{username}</p>
-        </div>
-        <div className="text-[#1D2E7F] text-center">
-          <p className="inline">Correos: </p>
-          {mail_personal && (
-            <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-              {mail_personal}
-            </p>
-          )}
-          {mail_institucional && (
-            <p className="text-[#8c9097] dark:text-white/50 text-[0.75rem]">
-              {mail_institucional}
-            </p>
-          )}
-        </div>
-        <div className="flex justify-center mt-4">
-          <button
-            //onClick={handleRegistrar}
-            className="ti-btn ti-btn-primary w-full"
-          >
-            Guardar
-          </button>
-        </div>
+        ) : (
+          <>
+            <h2 className="text-lg sm:text-xl font-bold mb-4">Datos obtenidos de la URL</h2>
+            {loading ? (
+              <p>Cargando...</p>
+            ) : (
+              <div className="mb-4">
+                <p><strong>Nombre:</strong> {data?.name}</p>
+                <p><strong>Identificación:</strong> {data?.identification}</p>
+                <p><strong>Email:</strong> {data?.mail}</p>
+                <p><strong>Departamento:</strong> {data?.department}</p>
+                <p><strong>Posición:</strong> {data?.position}</p>
+                <h3 className="font-bold mt-4">Cafés solicitados:</h3>
+                <ul className="list-disc list-inside">
+                  {data?.coffee.map((item, index) => (
+                    <li key={index}>
+                      {item.coffee_type} - Cantidad: {item.quantity}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={onClose}
+                className="bg-gray-500 text-white px-3 sm:px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleRegister}
+                className="bg-[#FC7E00] text-white px-3 sm:px-4 py-2 rounded"
+              >
+                Registrar
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 };
-export default ModalMostrarDatos;
+
+export default Modal;
