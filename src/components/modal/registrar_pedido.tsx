@@ -11,27 +11,60 @@ const Modal = ({ isOpen, onClose, url }) => {
     }
   }, [url]);
 
-  const fetchData = async () => {
-    setLoading(true);
-    // Simulando la respuesta del backend
-    const exampleData = {
-      name: "Juan Perez",
-      identification: "1234567890",
-      mail: "juan.perez@example.com",
-      department: "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
-      position: "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1",
-      coffee: [
-        { coffee_type: "espresso", quantity: 2 },
-        { coffee_type: "latte", quantity: 1 }
-      ]
-    };
+//   const fetchData = async () => {
+//     setLoading(true);
+//     try {
+//         const response = await fetch('http://localhost:2144/api/coffee_order', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 name: "Juan Perez",
+//                 identification: "1234567890",
+//                 mail: "juan.perez@example.com",
+//                 department: "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
+//                 position: "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1",
+//                 coffee: [
+//                     { coffee_type: "espresso", quantity: 2 },
+//                     { coffee_type: "latte", quantity: 1 }
+//                 ]
+//             })
+//         });
 
-    // Simular tiempo de respuesta del backend
-    setTimeout(() => {
-      setData(exampleData);
-      setLoading(false);
-    }, 1000);
+//         if (!response.ok) {
+//             throw new Error('Error en la solicitud');
+//         }
+
+//         const data = await response.json();
+//         setData(data);
+//     } catch (error) {
+//         console.error('Error al obtener los datos:', error);
+//     } finally {
+//         setLoading(false);
+//     }
+// };
+const fetchData = async () => {
+  setLoading(true);
+  // Simulando la respuesta del backend
+  const exampleData = {
+    name: "Juan Perez",
+    identification: "1234567890",
+    mail: "juan.perez@example.com",
+    department: "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
+    position: "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1",
+    coffee: [
+      { coffee_type: "espresso", quantity: 2 },
+      { coffee_type: "latte", quantity: 1 }
+    ]
   };
+
+  // Simular tiempo de respuesta del backend
+  setTimeout(() => {
+    setData(exampleData);
+    setLoading(false);
+  }, 1000);
+};
 
   const handleRegister = () => {
     // Aquí puedes hacer la llamada a la API para registrar los datos
