@@ -3,79 +3,91 @@ import { useState, useEffect } from 'react';
 const Modal = ({ isOpen, onClose, url }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
-  const [isSuccess, setIsSuccess] = useState(false); // Nuevo estado para manejar el éxito
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [selectedCoffee, setSelectedCoffee] = useState(''); // Estado para el tipo de café seleccionado
 
   useEffect(() => {
     if (url) {
       fetchData();
+    } else {
+      loadDemoData(); // Cargar datos de demostración si no hay URL
     }
   }, [url]);
 
-//   const fetchData = async () => {
-//     setLoading(true);
-//     try {
-//         const response = await fetch('http://localhost:2144/api/coffee_order', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 name: "Juan Perez",
-//                 identification: "1234567890",
-//                 mail: "juan.perez@example.com",
-//                 department: "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
-//                 position: "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1",
-//                 coffee: [
-//                     { coffee_type: "espresso", quantity: 2 },
-//                     { coffee_type: "latte", quantity: 1 }
-//                 ]
-//             })
-//         });
+  const fetchData = async () => {
+    setLoading(true);
 
-//         if (!response.ok) {
-//             throw new Error('Error en la solicitud');
-//         }
+    try {
+      const response = await fetch(url);
+      const result = await response.json();
 
-//         const data = await response.json();
-//         setData(data);
-//     } catch (error) {
-//         console.error('Error al obtener los datos:', error);
-//     } finally {
-//         setLoading(false);
-//     }
-// };
-const fetchData = async () => {
-  setLoading(true);
-  // Simulando la respuesta del backend
-  const exampleData = {
-    name: "Juan Perez",
-    identification: "1234567890",
-    mail: "juan.perez@example.com",
-    department: "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
-    position: "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1",
-    coffee: [
-      { coffee_type: "espresso", quantity: 2 },
-      { coffee_type: "latte", quantity: 1 }
-    ]
+      if (result.code === "0" && result.data) {
+        const fetchedData = {
+          name: result.data.institution_email.split("@")[0], // Ejemplo para obtener el nombre
+          identification: result.data.identification,
+          mail: result.data.institution_email,
+          department: result.data.department,
+          position: result.data.position
+        };
+
+        setData(fetchedData);
+      } else {
+        console.error("Error al obtener los datos:", result);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+
+    setLoading(false);
   };
 
-  // Simular tiempo de respuesta del backend
-  setTimeout(() => {
-    setData(exampleData);
-    setLoading(false);
-  }, 1000);
-};
+  const loadDemoData = () => {
+    // Datos de demostración
+    const demoData = {
+      name: "Juan Perez",
+      identification: "1234567890",
+      mail: "juan.perez@example.com",
+      department: "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
+      position: "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1"
+    };
+    setData(demoData);
+  };
 
-  const handleRegister = () => {
-    // Aquí puedes hacer la llamada a la API para registrar los datos
-    // Simularemos un envío exitoso
-    setIsSuccess(true);
-    // Puedes hacer un reset del modal después de unos segundos o al cerrarlo
+  const handleRegister = async () => {
+    if (!selectedCoffee) {
+      console.error("No se ha seleccionado un tipo de café.");
+      return;
+    }
+
+    const payload = {
+      ...data,
+      coffee: [{ coffee_type: selectedCoffee, quantity: 1 }]
+    };
+    console.log(payload)
+    try {
+      const response = await fetch('http://localhost:2144/api/coffee_order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+      } else {
+        console.error("Error al enviar los datos:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+
     setTimeout(() => {
       onClose();
       setIsSuccess(false);
       setData(null);
-    }, 2000); // Cierra el modal después de 2 segundos
+      setSelectedCoffee(''); // Resetea el estado del tipo de café seleccionado
+    }, 4000);
   };
 
   if (!isOpen) return null;
@@ -99,14 +111,18 @@ const fetchData = async () => {
                 <p><strong>Email:</strong> {data?.mail}</p>
                 <p><strong>Departamento:</strong> {data?.department}</p>
                 <p><strong>Posición:</strong> {data?.position}</p>
-                <h3 className="font-bold mt-4">Cafés solicitados:</h3>
-                <ul className="list-disc list-inside">
-                  {data?.coffee.map((item, index) => (
-                    <li key={index}>
-                      {item.coffee_type} - Cantidad: {item.quantity}
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="font-bold mt-4">Seleccionar tipo de café:</h3>
+                <select
+                  value={selectedCoffee}
+                  onChange={(e) => setSelectedCoffee(e.target.value)}
+                  className="border p-2 rounded w-full mt-2"
+                >
+                  <option value="" disabled>Selecciona un tipo de café</option>
+                  <option value="espresso">Espresso</option>
+                  <option value="americano">Americano</option>
+                  <option value="latte">Latte</option>
+                  <option value="cappuccino">Cappuccino</option>
+                </select>
               </div>
             )}
             <div className="flex justify-end space-x-2">
@@ -119,6 +135,7 @@ const fetchData = async () => {
               <button
                 onClick={handleRegister}
                 className="bg-[#FC7E00] text-white px-3 sm:px-4 py-2 rounded"
+                disabled={!selectedCoffee} // Deshabilitar si no se selecciona un tipo de café
               >
                 Registrar
               </button>

@@ -6,6 +6,21 @@
 }'"
 
 ---API Retorno de WebScraping---
+{
+    "code": "0",
+    "data": {
+        "address": "AV. 17 DE SEPTIEMBRE, LEONIDAS PROAÑO, 1",
+        "city": "MILAGRO",
+        "department": "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
+        "identification": "0941511222",
+        "institution_email": "jguerrag@unemi.edu.ec",
+        "personal_email": "jguerrag7@gmail.com",
+        "phone": "0969296211",
+        "position": "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1"
+    },
+}
+
+---API Guardar Pedido---
 curl --location 'http://localhost:2144/api/coffee_order' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -19,19 +34,3 @@ curl --location 'http://localhost:2144/api/coffee_order' \
             {"coffee_type": "latte", "quantity": 1}
         ]
     }'
-
----API Guardar Pedido---
-{
-    "code": "0",
-    "data": {
-        "address": "AV. 17 DE SEPTIEMBRE, LEONIDAS PROAÑO, 1",
-        "city": "MILAGRO",
-        "department": "DIRECCIÓN DE TECNOLOGÍA DE LA INFORMACIÓN Y COMUNICACIONES",
-        "identification": "0941511222",
-        "institution_email": "jguerrag@unemi.edu.ec",
-        "personal_email": "jguerrag7@gmail.com",
-        "phone": "0969296211",
-        "position": "ASISTENTE TECNICO DE DESARROLLO DE SISTEMAS DE INFORMACION 1"
-    },
-    "message": "Order processed successfully"
-}
