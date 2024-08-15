@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Footer from '../components/layout/footer';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const handleLogin = async () => {
@@ -14,6 +15,7 @@ const Login = () => {
         window.location.href = data.auth_url;
       }
     } catch (error) {
+      toast.error("Sucedió un error al iniciar sesión.")
       console.error('Error during login:', error);
     }
   };
