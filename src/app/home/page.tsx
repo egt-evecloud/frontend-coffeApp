@@ -1,14 +1,24 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Navbar from '../../components/layout/navbar';
 import Footer from '../../components/layout/footer';
 import { Scanner } from '@yudiel/react-qr-scanner';
 import Modal from '@/components/modal/registrar_pedido';
 import axios from 'axios';
+import { useAuth } from '@/app/authContext';
 
 const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scannedUrl, setScannedUrl] = useState('');
+  const { token } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!token) {
+      router.push('/login'); // Redirige a la página de inicio de sesión si no está autenticado
+    }
+  }, [token, router]);
 
   const handleScan = (result: any) => {
     if (result.length > 0) {
@@ -32,7 +42,9 @@ const HomePage = () => {
     setIsModalOpen(false);
     setScannedUrl('');
   };
-
+  if (!token) {
+    return null; // O muestra un mensaje de carga si prefieres
+  }
   return (
     <div>
       <Navbar />
