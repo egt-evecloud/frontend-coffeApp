@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 const Navbar = () => {
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
-    router.push('/'); // Redirige al usuario a la página de inicio de sesión
-  };
+  // const handleLogout = () => {
+  //   logout();
+  //   router.push('/'); // Redirige al usuario a la página de inicio de sesión
+  // };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -24,7 +24,8 @@ const Navbar = () => {
           <p>Coffee App</p>
         </div>
         <div className="hidden md:flex space-x-4 font-bold text-[#1D2E7F]">
-          <button onClick={handleLogout} type="button" >
+          {/* <button onClick={handleLogout} type="button" > */}
+          <button type="button">
             Cerrar Sesión
           </button>
           <button
@@ -43,7 +44,9 @@ const Navbar = () => {
       {
         isOpen && (
           <div className="md:hidden">
-            <button onClick={handleLogout} className="block px-4 py-2 text-sm font-bold text-[#1D2E7F]">
+            {/* <button onClick={handleLogout} className="block px-4 py-2 text-sm font-bold text-[#1D2E7F]"> */}
+            <button className="block px-4 py-2 text-sm font-bold text-[#1D2E7F]">
+
               Cerrar Sesión
             </button>
             <p className="block px-4 py-2 text-sm font-bold text-[#1D2E7F]">Usuario</p>
